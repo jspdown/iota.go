@@ -260,12 +260,8 @@ type NodeInfoResponse struct {
 	IsHealthy bool `json:"isHealthy"`
 	// The human friendly name of the network ID on which the node operates on.
 	NetworkID string `json:"networkId"`
-	// The hex encoded ID of the latest known milestone.
-	LatestMilestoneID string `json:"latestMilestoneId"`
 	// The latest known milestone index.
 	LatestMilestoneIndex uint32 `json:"latestMilestoneIndex"`
-	// The hex encoded ID of the current solid milestone.
-	SolidMilestoneID string `json:"solidMilestoneId"`
 	// The current solid milestone's index.
 	SolidMilestoneIndex uint32 `json:"solidMilestoneIndex"`
 	// The milestone index at which the last pruning commenced.
@@ -542,7 +538,7 @@ func (api *NodeAPI) OutputIDsByAddress(address string, includeSpentOutputs bool)
 type MilestoneResponse struct {
 	// The index of the milestone.
 	Index uint32 `json:"milestoneIndex"`
-	// The hex encoded message ID of the message.
+	// The hex encoded message ID of the message containing the milestone.
 	MessageID string `json:"messageId"`
 	// The unix time of the milestone payload.
 	Time int64 `json:"timestamp"`

@@ -129,16 +129,6 @@ type Milestone struct {
 	Signatures []MilestoneSignature
 }
 
-// ID computes the ID of the Milestone.
-func (m *Milestone) ID() (*MilestoneID, error) {
-	data, err := m.Serialize(DeSeriModeNoValidation)
-	if err != nil {
-		return nil, fmt.Errorf("can't compute milestone payload ID: %w", err)
-	}
-	h := blake2b.Sum256(data)
-	return &h, nil
-}
-
 // Essence returns the essence bytes (the bytes to be signed) of the Milestone.
 func (m *Milestone) Essence() ([]byte, error) {
 	return NewSerializer().
