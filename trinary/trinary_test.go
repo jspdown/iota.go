@@ -75,15 +75,26 @@ var _ = Describe("Trinary", func() {
 
 	Context("IntToTrits()", func() {
 		It("should return correct trits representation for positive int64", func() {
-			Expect(IntToTrits(12)).To(Equal(Trits{0, 1, 1}))
-			Expect(IntToTrits(2)).To(Equal(Trits{-1, 1}))
-			Expect(IntToTrits(3332727)).To(Equal(Trits{0, 0, 1, -1, 0, -1, 0, 0, 1, 1, -1, 1, 0, -1, 1}))
-			Expect(IntToTrits(0)).To(Equal(Trits{0}))
+			Expect(IntToTrits(12, 3)).To(Equal(Trits{0, 1, 1}))
+			Expect(IntToTrits(2, 2)).To(Equal(Trits{-1, 1}))
+			Expect(IntToTrits(3332727, 15)).To(Equal(Trits{0, 0, 1, -1, 0, -1, 0, 0, 1, 1, -1, 1, 0, -1, 1}))
+			Expect(IntToTrits(0, 1)).To(Equal(Trits{0}))
 		})
 
 		It("should return correct trits representation for negative int64", func() {
-			Expect(IntToTrits(-7)).To(Equal(Trits{-1, 1, -1}))
-			Expect(IntToTrits(-1094385)).To(Equal(Trits{0, -1, 1, 0, 1, -1, -1, 1, 1, 1, -1, 0, 1, -1}))
+			Expect(IntToTrits(-7, 3)).To(Equal(Trits{-1, 1, -1}))
+			Expect(IntToTrits(-1094385, 14)).To(Equal(Trits{0, -1, 1, 0, 1, -1, -1, 1, 1, 1, -1, 0, 1, -1}))
+		})
+
+		It("should handle overflow", func() {
+			Expect(IntToTrits(-7, 2)).To(Equal(Trits{-1, 1}))
+			Expect(IntToTrits(-1094385, 5)).To(Equal(Trits{0, -1, 1, 0, 1}))
+			Expect(IntToTrits(50, 0)).To(Equal(Trits{}))
+		})
+
+		It("should pad up to the given size", func() {
+			Expect(IntToTrits(-6, 4)).To(Equal(Trits{0, 1, -1, 0}))
+			Expect(IntToTrits(6, 5)).To(Equal(Trits{0, -1, 1, 0, 0}))
 		})
 	})
 
@@ -299,9 +310,9 @@ var _ = Describe("Trinary", func() {
 
 	Context("AddTrits()", func() {
 		It("should correctly add trits together (positive)", func() {
-			Expect(TritsToInt(AddTrits(IntToTrits(5), IntToTrits(5)))).To(Equal(int64(10)))
-			Expect(TritsToInt(AddTrits(IntToTrits(0), IntToTrits(0)))).To(Equal(int64(0)))
-			Expect(TritsToInt(AddTrits(IntToTrits(-100), IntToTrits(-20)))).To(Equal(int64(-120)))
+			Expect(TritsToInt(AddTrits(IntToTrits(5, 3), IntToTrits(5, 3)))).To(Equal(int64(10)))
+			Expect(TritsToInt(AddTrits(IntToTrits(0, 1), IntToTrits(0, 1)))).To(Equal(int64(0)))
+			Expect(TritsToInt(AddTrits(IntToTrits(-100, 5), IntToTrits(-20,4)))).To(Equal(int64(-120)))
 		})
 	})
 })
